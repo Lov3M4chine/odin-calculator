@@ -27,7 +27,7 @@
     width: 95%;
     height: 10%;
     border: 5px solid black;
-    gap: 10%;
+    gap: 5%;
 }
 
 .main-button-container {
@@ -48,6 +48,9 @@
     border: 5px solid black;
 }
 
-#clear-button #delete-button {
+#clear-button, #delete-button {
+    width: 40%;
+    height: 60%;
     font-size: 24px;
+    
 }
