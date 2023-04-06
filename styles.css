@@ -15,6 +15,7 @@
 }
 
 .display {
+    display: flex;
     width: 95%;
     height: 25%;
     border: 5px solid black
@@ -53,4 +54,19 @@
     height: 60%;
     font-size: 24px;
     
+}
+
+.memory-display {
+    border: 5px solid blue;
+    width: 50%;
+    font-size: 20px;
+}
+
+.current-input-display {
+    display: flex;
+    justify-content: end;
+    align-items: end;
+    border: 5px solid red;
+    width: 50%;
+    font-size: 60px;
 }
