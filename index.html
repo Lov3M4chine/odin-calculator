@@ -12,32 +12,37 @@
         <div class="calculator-container">
             <div class="display">
                 <div class="memory-display"></div>
-                <div class="current-input-display"></div>
+                <div class="current-input-display">
+                    <div class="current-number" id="current-number-display"></div>
+                    <div class="operation-sign" id="operator-display"></div>
+                    <div class="saved-number" id="saved-number-display"></div>
+                    
+                </div>
             </div>
             <div class="clear-delete-buttons">
                 <button id="clear-button">CLEAR</button>
                 <button id="delete-button">DELETE</button>
             </div>
             <div class="main-button-container">
-                <button id="7" class="main-button">7</button>
-                <button id="8" class="main-button">8</button>
-                <button id="9" class="main-button">9</button>
-                <button id="divide-button" class="main-button">÷</button>
-                <button id="4" class="main-button">4</button>
-                <button id="5" class="main-button">5</button>
-                <button id="6" class="main-button">6</button>
-                <button id="multiply-button" class="main-button">x</button>
-                <button id="1" class="main-button">1</button>
-                <button id="2" class="main-button">2</button>
-                <button id="3" class="main-button">3</button>
-                <button id="minus-button" class="main-button">-</button>
-                <button id="." class="main-button">.</button>
-                <button id="0" class="main-button">0</button>
+                <button id="7" class="main-button digits">7</button>
+                <button id="8" class="main-button digits">8</button>
+                <button id="9" class="main-button digits">9</button>
+                <button id="divide-button" class="main-button operator">÷</button>
+                <button id="4" class="main-button digits">4</button>
+                <button id="5" class="main-button digits">5</button>
+                <button id="6" class="main-button digits">6</button>
+                <button id="multiply-button" class="main-button operator">x</button>
+                <button id="1" class="main-button digits">1</button>
+                <button id="2" class="main-button digits">2</button>
+                <button id="3" class="main-button digits">3</button>
+                <button id="minus-button" class="main-button operator">-</button>
+                <button id="." class="main-button digits">.</button>
+                <button id="0" class="main-button digits">0</button>
                 <button id="equals-button" class="main-button">=</button>
-                <button id="plus-button" class="main-button">+</button>
+                <button id="plus-button" class="main-button operator">+</button>
             </div>
         </div>
     </div>
-    <script src="scripts.js"></script>
+    <script src="newScripts.js"></script>
 </body>
 </html>
