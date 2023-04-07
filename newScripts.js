@@ -45,6 +45,7 @@ operators.forEach(function(button) {
       // If this is the first calculation or the previous calculation is complete,
       // use the current number display as the first operand
       if (operand1 === null || operator === null) {
+        button.disabled = true;
         operand1 = parseFloat(currentNumberDisplay.textContent);
         savedNumberDisplay.textContent = operand1;
       } else {
@@ -60,7 +61,6 @@ operators.forEach(function(button) {
       // Clear the current number display for the next operand
       currentNumberDisplay.textContent = "";
       decimalButton.disabled = false;
-      disableOperators();
     });
   });
 
@@ -136,13 +136,7 @@ function calculate(operand1, operand2, operator) {
 }
 
 function enableOperators() {
-  operators.forEach(function(button) {
-    button.removeAttribute('disabled');
-  });
-}
-
-function disableOperators() {
-    operators.forEach(function(operatorButton) {
-        operatorButton.disabled = true;
+    operators.forEach(function(button) {
+      button.removeAttribute('disabled');
     });
-}
+  }

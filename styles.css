@@ -18,7 +18,6 @@
     display: flex;
     width: 95%;
     height: 25%;
-    border: 5px solid black
 }
 
 .clear-delete-buttons {
@@ -27,7 +26,6 @@
     align-items: center;
     width: 95%;
     height: 10%;
-    border: 5px solid black;
     gap: 5%;
 }
 
@@ -39,7 +37,7 @@
     align-items: center;
     width: 95%;
     height: 65%;
-    border: 5px solid black;
+    margin-bottom: 5px;;
 }
 
 .main-button {
@@ -57,7 +55,6 @@
 }
 
 .memory-display {
-    border: 5px solid blue;
     width: 50%;
     font-size: 16px;
     max-height: 200px;
@@ -69,7 +66,6 @@
     flex-direction: column-reverse;
     justify-content: space-between;
     align-items: end;
-    border: 5px solid red;
     width: 50%;
 }
 
