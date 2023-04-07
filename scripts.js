@@ -1,5 +1,8 @@
-let num1 = 0;
-let num2 = 0;
+let num1 = null;
+let num2 = null;
+let currentNum = null;
+let calculatedNum = null;
+let currentOperator = null;
 let currentButtonClicked = "";
 let digits = ['7', '8', '9', '4', '5', '6', '1', '2', '3', '.']
 const memoryDisplay = document.querySelector('.memory-display');
@@ -19,66 +22,111 @@ function automateGetElementByID (buttonIDs) {
 
 buttons['7'].addEventListener('click', function() {
     currentButtonClicked = '7';
+    captureNum();
 });
 
 buttons['8'].addEventListener('click', function() {
     currentButtonClicked = '8';
+    captureNum();
 });
 
 buttons['9'].addEventListener('click', function() {
     currentButtonClicked = '9';
+    captureNum();
 });
 
 buttons['divide-button'].addEventListener('click', function() {
     currentButtonClicked = 'divide-button';
+    currentOperator = "/";
+    if (num1 === null) {
+        saveToNumOne;
+    }
+    else if (num2 === null) {
+        saveToNumTwo();
+        calculateNum();
+    } 
 });
 
 buttons['4'].addEventListener('click', function() {
     currentButtonClicked = '4';
+    captureNum();
 });
 
 buttons['5'].addEventListener('click', function() {
     currentButtonClicked = '5';
+    captureNum();
 });
 
 buttons['6'].addEventListener('click', function() {
     currentButtonClicked = '6';
+    captureNum();
 });
 
 buttons['multiply-button'].addEventListener('click', function() {
     currentButtonClicked = 'multiply-button';
+    currentOperator = "*";
+    if (num1 === null) {
+        saveToNumOne;
+    }
+    else if (num2 === null) {
+        saveToNumTwo();
+        calculateNum();
+    } 
 });
 
 buttons['1'].addEventListener('click', function() {
     currentButtonClicked = '1';
+    captureNum();
 });
 
 buttons['2'].addEventListener('click', function() {
     currentButtonClicked = '2';
+    captureNum();
 });
 
 buttons['3'].addEventListener('click', function() {
     currentButtonClicked = '3';
+    captureNum();
 });
 
 buttons['minus-button'].addEventListener('click', function() {
     currentButtonClicked = 'minus-button';
+    currentOperator = "-";
+    if (num1 === null) {
+        saveToNumOne;
+    }
+    else if (num2 === null) {
+        saveToNumTwo();
+        calculateNum();
+    } 
 });
 
 buttons['.'].addEventListener('click', function() {
     currentButtonClicked = '.';
+    captureNum();
 });
 
 buttons['0'].addEventListener('click', function() {
     currentButtonClicked = '0';
+    captureNum();
 });
 
 buttons['equals-button'].addEventListener('click', function() {
     currentButtonClicked = 'equals-button';
+    saveToNumTwo();
+    num1 = null;
 });
 
 buttons['plus-button'].addEventListener('click', function() {
     currentButtonClicked = 'plus-button';
+    currentOperator = "+";
+    if (num1 === null) {
+        saveToNumOne();
+    }
+    else if (num2 === null) {
+        saveToNumTwo();
+        calculateNum();
+    } 
 });
 
 buttons['clear-button'].addEventListener('click', function() {
@@ -91,11 +139,42 @@ buttons['delete-button'].addEventListener('click', function() {
 
 //on first button press sequence, store number into num1
 
-function storeNumber () {
-    if (!mainButtons.includes(currentButtonClicked)) {
-        num1 += parseInt(currentButtonClicked)
-    }
+function captureNum () {
+    currentNum += currentButtonClicked
 }
+
+function saveToNumOne () {
+    num1 = parseInt(currentNum);
+    currentNum = null;
+}
+
+function saveToNumTwo () {
+    num2 = parseInt(currentNum);
+    currentNum = null;
+}
+
+
+
+function calculateNum () {
+    switch (currentOperator) {
+      case '+':
+        num1 = num1 + num2;
+        break;
+      case '-':
+        num1 = num1 - num2;
+        break;
+      case '*':
+        num1 = num1 * num2;
+        break;
+      case '/':
+        num1 = num1 / num2;
+        break;
+      default:
+        num1 = NaN;
+    }
+    num2 = null;
+    return num1;
+  }
 
 //end first button press sequence when operation is pressed
 //begin second button press sequence, store number into num2
@@ -118,3 +197,6 @@ function operationDivision {
     return num1 / num2;
 }
 //save to memory function
+
+
+automateGetElementByID(buttonIDs);
