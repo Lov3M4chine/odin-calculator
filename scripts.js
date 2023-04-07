@@ -1,6 +1,6 @@
 let num1 = null;
 let num2 = null;
-let currentNum = null;
+let currentNum = [];
 let calculatedNum = null;
 let currentOperator = null;
 let currentButtonClicked = "";
@@ -153,8 +153,6 @@ function saveToNumTwo () {
     currentNum = null;
 }
 
-
-
 function calculateNum () {
     switch (currentOperator) {
       case '+':
@@ -174,6 +172,19 @@ function calculateNum () {
     }
     num2 = null;
     return num1;
+  }
+
+  function clear () {
+    num1 = null;
+    num2 = null;
+    currentNum = [];
+    calculatedNum = null;
+    currentOperator = null;
+    currentButtonClicked = "";
+  }
+
+  function delete () {
+    currentNum.pop();
   }
 
 //end first button press sequence when operation is pressed
