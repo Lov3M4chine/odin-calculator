@@ -1,24 +1,24 @@
-let num1 = null;
-let num2 = null;
+let num1;
+let num2;
 let currentNum = [];
-let calculatedNum = null;
-let currentOperator = null;
+let calculatedNum;
+let currentOperator;
 let currentButtonClicked = "";
 let digits = ['7', '8', '9', '4', '5', '6', '1', '2', '3', '.']
 const memoryDisplay = document.querySelector('.memory-display');
 const currentInputDisplay = document.querySelector('.current-input-display');
-const buttonIDs = ['7', '8', '9', 'divide-button', '4', '5', '6', +
-'multiply-button', '1', '2', '3', 'minus-button', '.', '0', 'equals-button', 'plus-button', 'clear-button', 'delete-button'];
-
+const buttonIDs = ['7', '8', '9', 'divide-button', '4', '5', '6', 'multiply-button', '1', '2', '3', 'minus-button', '.', '0', 'equals-button', 'plus-button', 'clear-button', 'delete-button'];
 
 //store the buttons with their respective IDs into an object
 function automateGetElementByID (buttonIDs) {
     const buttons = {};
     buttonIDs.forEach((ID) => {
-        buttons[ID] = document.getElementById('${ID}');
+        buttons[ID] = document.getElementById(ID);
     });
     return buttons;
 }
+
+const buttons = automateGetElementByID(buttonIDs);
 
 buttons['7'].addEventListener('click', function() {
     currentButtonClicked = '7';
@@ -39,7 +39,7 @@ buttons['divide-button'].addEventListener('click', function() {
     currentButtonClicked = 'divide-button';
     currentOperator = "/";
     if (num1 === null) {
-        saveToNumOne;
+        saveToNumOne();
     }
     else if (num2 === null) {
         saveToNumTwo();
@@ -66,7 +66,7 @@ buttons['multiply-button'].addEventListener('click', function() {
     currentButtonClicked = 'multiply-button';
     currentOperator = "*";
     if (num1 === null) {
-        saveToNumOne;
+        saveToNumOne();
     }
     else if (num2 === null) {
         saveToNumTwo();
@@ -93,7 +93,7 @@ buttons['minus-button'].addEventListener('click', function() {
     currentButtonClicked = 'minus-button';
     currentOperator = "-";
     if (num1 === null) {
-        saveToNumOne;
+        saveToNumOne();
     }
     else if (num2 === null) {
         saveToNumTwo();
@@ -131,6 +131,7 @@ buttons['plus-button'].addEventListener('click', function() {
 
 buttons['clear-button'].addEventListener('click', function() {
     currentButtonClicked = 'clear-button';
+    clearAll();
 });
 
 buttons['delete-button'].addEventListener('click', function() {
@@ -140,17 +141,20 @@ buttons['delete-button'].addEventListener('click', function() {
 //on first button press sequence, store number into num1
 
 function captureNum () {
-    currentNum += currentButtonClicked
+    currentNum.push(currentButtonClicked);
+    const numString = currentNum.join('');
+    const num = parseFloat(numString);
+    currentInputDisplay.textContent = num;
 }
 
 function saveToNumOne () {
-    num1 = parseInt(currentNum);
-    currentNum = null;
+    num1 = parseFloat(currentNum);
+    currentNum = [];
 }
 
 function saveToNumTwo () {
-    num2 = parseInt(currentNum);
-    currentNum = null;
+    num2 = parseFloat(currentNum);
+    currentNum = [];
 }
 
 function calculateNum () {
@@ -174,40 +178,23 @@ function calculateNum () {
     return num1;
   }
 
-  function clear () {
+  function clearAll () {
     num1 = null;
     num2 = null;
     currentNum = [];
     calculatedNum = null;
     currentOperator = null;
     currentButtonClicked = "";
+    currentInputDisplay.textContent = "";
   }
 
-  function delete () {
-    currentNum.pop();
-  }
+//   function deleteLast () {
+//     currentNum.pop();
+//   }
 
 //end first button press sequence when operation is pressed
 //begin second button press sequence, store number into num2
 //end second button press sequence when operation is pressed or equal sign is pressed
-
-//addition function
-function operationAddition {
-    return num1 + num2;
-}
-//subtraction function
-function operationSubtration {
-    return num1 - num2;
-}
-//multiplication function
-function operationMultiplication {
-    return num1 * num2;
-}
-//division function
-function operationDivision {
-    return num1 / num2;
-}
 //save to memory function
 
 
-automateGetElementByID(buttonIDs);
