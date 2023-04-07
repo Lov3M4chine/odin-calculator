@@ -1,4 +1,3 @@
-
 let operand1 = null;
 let operand2 = null;
 let operator = null;
@@ -9,6 +8,9 @@ let operatorDisplay = document.querySelector("#operator-display");
 let savedNumberDisplay = document.querySelector("#saved-number-display");
 let clearButton = document.getElementById("clear-button");
 let equalSign = document.getElementById("equals-button");
+let deleteButton = document.getElementById("delete-button");
+let memoryDisplay = document.querySelector(".memory-display");
+let decimalButton = document.getElementById(".");
 
 // Loop through each button and add a click event listener to it
 digits.forEach(function(button) {
@@ -20,36 +22,84 @@ digits.forEach(function(button) {
   });
 });
 
+decimalButton.addEventListener('click', function() {
+    // Check if there's already a decimal point in the current number display
+    if (currentNumberDisplay.textContent.includes(".")) {
+      // If there is, disable the decimal button
+      decimalButton.disabled = true;
+    } else {
+      // If there isn't, add the decimal point and enable the decimal button
+      currentNumberDisplay.textContent += ".";
+      decimalButton.disabled = false;
+    }
+  });
+
 operators.forEach(function(button) {
     button.addEventListener('click', function(event) {
       // Get the text content of the button that was clicked
       let buttonPressed = event.target.textContent;
       // Update the operator display with the operator pressed
       operatorDisplay.textContent = buttonPressed;
-      // Move the current number display into the saved number display
+
+      // If this is the first calculation or the previous calculation is complete,
+      // use the current number display as the first operand
+      if (operand1 === null || operator === null) {
+        operand1 = parseFloat(currentNumberDisplay.textContent);
+        savedNumberDisplay.textContent = operand1;
+      } else {
+        // Otherwise, use the result of the previous calculation as the first operand
+        operand2 = parseFloat(currentNumberDisplay.textContent);
+        operand1 = calculate(operand1, operand2, operator);
+        savedNumberDisplay.textContent = operand1;
+      }
+
+      // Store the operator for the current calculation
       operator = buttonPressed;
-      operand1 = parseFloat(currentNumberDisplay.textContent)
-      savedNumberDisplay.textContent = currentNumberDisplay.textContent;
+
+      // Clear the current number display for the next operand
       currentNumberDisplay.textContent = "";
+      decimalButton.disabled = false;
     });
   });
 
 equalSign.addEventListener("click", function() {
+    // Get the second operand from the current number display
     operand2 = parseFloat(currentNumberDisplay.textContent);
-    savedNumberDisplay.textContent = calculate(operand1, operand2, operator);
+    // Calculate the result of the current operation
+    let result = calculate(operand1, operand2, operator);
+    // Update the saved number display with the result
+    savedNumberDisplay.textContent = result;
+    // Clear the operator display and the current number display for the next calculation
     operatorDisplay.textContent = "";
     currentNumberDisplay.textContent = "";
-
-})
+    // Use the result as the first operand for the next calculation
+    operand1 = result;
+    // Clear the second operand and operator to prepare for the next operation
+    operand2 = null;
+    operator = null;
+});
 
 clearButton.addEventListener("click", function (){
     clearAll();
+});
+
+deleteButton.addEventListener("click", function() {
+    deleteLast();
 })
 
 function clearAll () {
     currentNumberDisplay.textContent = "";
     operatorDisplay.textContent = "";
     savedNumberDisplay.textContent = "";
+    memoryDisplay.textContent = "";
+    operand1 = null;
+    operand2 = null;
+    operator = null;
+    decimalButton.disabled = false;
+}
+
+function deleteLast () {
+    currentNumberDisplay.textContent = currentNumberDisplay.textContent.substring(0, currentNumberDisplay.textContent.length - 1);
 }
 
 function calculate(operand1, operand2, operator) {
@@ -66,6 +116,7 @@ function calculate(operand1, operand2, operator) {
         break;
       case '÷':
         if(operand2 === 0) {
+            alert("Cannot divide by 0")
           result = NaN;
         } else {
           result = operand1 / operand2;
@@ -74,5 +125,10 @@ function calculate(operand1, operand2, operator) {
       default:
         result = NaN;
     }
-    return result;
-  }
+    result = Number(result.toFixed(2));
+    let equation = operand1 + " " + operator + " " + operand2 + " " + "=" + " " + result;
+    memoryDisplay.innerHTML += equation + "<br>";
+    memoryDisplay.scrollTop = memoryDisplay.scrollHeight;
+    decimalButton.disabled = false;
+  return result;
+}
