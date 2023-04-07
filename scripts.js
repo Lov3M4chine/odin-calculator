@@ -1,294 +1,134 @@
-let num1;
-let num2;
-let currentNum = [];
-let calculatedNum;
-let currentOperator;
-let currentButtonClicked = "";
-let currentTextDisplay = [];
-const digits = ['7', '8', '9', '4', '5', '6', '1', '2', '3', '.']
-let memoryDisplay = document.querySelector('.memory-display');
-let currentNumberDisplay = document.querySelector('.current-number');
-let operationSignDisplay = document.querySelector('.operation-sign');
-let savedNumberDisplay = document.querySelector('.saved-number');
-const buttonIDs = ['7', '8', '9', 'divide-button', '4', '5', '6', 'multiply-button', '1', '2', '3', 'minus-button', '.', '0', 'equals-button', 'plus-button', 'clear-button', 'delete-button'];
-const operatorSymbols = {
-    '+': '+',
-    '-': '-',
-    '*': '×',
-    '/': '÷'
-  };
+let operand1 = null;
+let operand2 = null;
+let operator = null;
+let digits = document.querySelectorAll(".digits");
+let operators = document.querySelectorAll(".operator");
+let currentNumberDisplay = document.querySelector("#current-number-display");
+let operatorDisplay = document.querySelector("#operator-display");
+let savedNumberDisplay = document.querySelector("#saved-number-display");
+let clearButton = document.getElementById("clear-button");
+let equalSign = document.getElementById("equals-button");
+let deleteButton = document.getElementById("delete-button");
+let memoryDisplay = document.querySelector(".memory-display");
+let decimalButton = document.getElementById(".");
 
-//store the buttons with their respective IDs into an object
-function automateGetElementByID (buttonIDs) {
-    const buttons = {};
-    buttonIDs.forEach((ID) => {
-        buttons[ID] = document.getElementById(ID);
-    });
-    return buttons;
-}
-
-const buttons = automateGetElementByID(buttonIDs);
-
-buttons['7'].addEventListener('click', function() {
-    currentButtonClicked = '7';
-    captureNum();
-    convertToCurrentNumberDisplay();
+// Loop through each button and add a click event listener to it
+digits.forEach(function(button) {
+  button.addEventListener('click', function(event) {
+    // Get the text content of the button that was clicked
+    let buttonPressed = event.target.textContent;
+    // Update the current number display with the button pressed
+    currentNumberDisplay.textContent += buttonPressed;
+  });
 });
 
-buttons['8'].addEventListener('click', function() {
-    currentButtonClicked = '8';
-    captureNum();
-    convertToCurrentNumberDisplay();
-});
-
-buttons['9'].addEventListener('click', function() {
-    currentButtonClicked = '9';
-    captureNum();
-    convertToCurrentNumberDisplay();
-});
-
-buttons['divide-button'].addEventListener('click', function() {
-    currentButtonClicked = 'divide-button';
-    currentOperator = "/";
-    captureOperation();
-    if (num1 === null) {
-      convertToOperatorDisplay()
-      convertToSavedNumberDisplay();
-      saveToNumOne(true); // overwrite num1
-      convertToCurrentNumberDisplay();
+decimalButton.addEventListener('click', function() {
+    // Check if there's already a decimal point in the current number display
+    if (currentNumberDisplay.textContent.includes(".")) {
+      // If there is, disable the decimal button
+      decimalButton.disabled = true;
     } else {
-      saveToNumOne(false); // add to num1
-      convertToSavedNumberDisplay();
-      calculateNum();
-      saveCalculatedNumber();
+      // If there isn't, add the decimal point and enable the decimal button
+      currentNumberDisplay.textContent += ".";
+      decimalButton.disabled = false;
     }
-});
+  });
 
-buttons['4'].addEventListener('click', function() {
-    currentButtonClicked = '4';
-    captureNum();
-    convertToCurrentNumberDisplay();
-});
+operators.forEach(function(button) {
+    button.addEventListener('click', function(event) {
+      // Get the text content of the button that was clicked
+      let buttonPressed = event.target.textContent;
+      // Update the operator display with the operator pressed
+      operatorDisplay.textContent = buttonPressed;
 
-buttons['5'].addEventListener('click', function() {
-    currentButtonClicked = '5';
-    captureNum();
-    convertToCurrentNumberDisplay();
-});
-
-buttons['6'].addEventListener('click', function() {
-    currentButtonClicked = '6';
-    captureNum();
-    convertToCurrentNumberDisplay();
-});
-
-buttons['multiply-button'].addEventListener('click', function() {
-    currentButtonClicked = 'multiply-button';
-    currentOperator = "*";
-    captureOperation();
-    if (num1 === null) {
-        convertToOperatorDisplay()
-        convertToSavedNumberDisplay();
-        saveToNumOne(true); // overwrite num1
-        convertToCurrentNumberDisplay();
+      // If this is the first calculation or the previous calculation is complete,
+      // use the current number display as the first operand
+      if (operand1 === null || operator === null) {
+        operand1 = parseFloat(currentNumberDisplay.textContent);
+        savedNumberDisplay.textContent = operand1;
       } else {
-        saveToNumOne(false); // add to num1
-        convertToSavedNumberDisplay();
-        calculateNum();
-        saveCalculatedNumber();
+        // Otherwise, use the result of the previous calculation as the first operand
+        operand2 = parseFloat(currentNumberDisplay.textContent);
+        operand1 = calculate(operand1, operand2, operator);
+        savedNumberDisplay.textContent = operand1;
       }
+
+      // Store the operator for the current calculation
+      operator = buttonPressed;
+
+      // Clear the current number display for the next operand
+      currentNumberDisplay.textContent = "";
+      decimalButton.disabled = false;
+    });
+  });
+
+equalSign.addEventListener("click", function() {
+    // Get the second operand from the current number display
+    operand2 = parseFloat(currentNumberDisplay.textContent);
+    // Calculate the result of the current operation
+    let result = calculate(operand1, operand2, operator);
+    // Update the saved number display with the result
+    savedNumberDisplay.textContent = result;
+    // Clear the operator display and the current number display for the next calculation
+    operatorDisplay.textContent = "";
+    currentNumberDisplay.textContent = "";
+    // Use the result as the first operand for the next calculation
+    operand1 = result;
+    // Clear the second operand and operator to prepare for the next operation
+    operand2 = null;
+    operator = null;
 });
 
-buttons['1'].addEventListener('click', function() {
-    currentButtonClicked = '1';
-    captureNum();
-    convertToCurrentNumberDisplay();
-});
-
-buttons['2'].addEventListener('click', function() {
-    currentButtonClicked = '2';
-    captureNum();
-    convertToCurrentNumberDisplay();
-});
-
-buttons['3'].addEventListener('click', function() {
-    currentButtonClicked = '3';
-    captureNum();
-    convertToCurrentNumberDisplay();
-});
-
-buttons['minus-button'].addEventListener('click', function() {
-    currentButtonClicked = 'minus-button';
-    currentOperator = "-";
-    captureOperation();
-    if (num1 === null) {
-        convertToOperatorDisplay()
-        convertToSavedNumberDisplay();
-        saveToNumOne(true); // overwrite num1
-        convertToCurrentNumberDisplay();
-      } else {
-        saveToNumOne(false); // add to num1
-        convertToSavedNumberDisplay();
-        calculateNum();
-        saveCalculatedNumber();
-      }
-});
-
-buttons['.'].addEventListener('click', function() {
-    currentButtonClicked = '.';
-    captureNum();
-    convertToCurrentNumberDisplay();
-});
-
-buttons['0'].addEventListener('click', function() {
-    currentButtonClicked = '0';
-    captureNum();
-    convertToCurrentNumberDisplay();
-});
-
-buttons['equals-button'].addEventListener('click', function() {
-    currentButtonClicked = 'equals-button';
-    saveToNumTwo();
-    calculateNum();
-    num1 = null;
-});
-
-buttons['plus-button'].addEventListener('click', function() {
-    currentButtonClicked = 'plus-button';
-    currentOperator = "+";
-    captureOperation();
-    if (num1 === null) {
-        convertToOperatorDisplay()
-        convertToSavedNumberDisplay();
-        saveToNumOne(true); // overwrite num1
-        convertToCurrentNumberDisplay();
-      } else {
-        saveToNumOne(false); // add to num1
-        convertToSavedNumberDisplay();
-        calculateNum();
-        saveCalculatedNumber();
-      }
-});
-
-buttons['clear-button'].addEventListener('click', function() {
-    currentButtonClicked = 'clear-button';
+clearButton.addEventListener("click", function (){
     clearAll();
 });
 
-buttons['delete-button'].addEventListener('click', function() {
-    currentButtonClicked = 'delete-button';
-});
+deleteButton.addEventListener("click", function() {
+    deleteLast();
+})
 
-//on first button press sequence, store number into num1
-
-function captureNum () {
-    const button = buttons[currentButtonClicked];
-    const buttonText = button.textContent;
-    currentNum.push(buttonText);
-    currentTextDisplay.push(buttonText);
-}
-
-function captureOperation () {
-    const symbol = operatorSymbols[currentOperator];
-    if (currentNum.length > 0) {
-        currentTextDisplay.push(currentNum.join(""));
-        currentNum = [];
-    }
-    currentTextDisplay.push(symbol);
-}
-
-function convertToCurrentNumberDisplay () {
-    let textString = currentTextDisplay.join("");
-    textString = textString.replace(/[+x-÷]/g, "");
-    currentNumberDisplay.textContent = textString
-}
-
-function convertToSavedNumberDisplay () {
-    let textString = currentTextDisplay.join("");
-    textString = textString.replace(/[+x-÷]/g, "");
-    savedNumberDisplay.textContent = textString;
-}
-
-function convertToOperatorDisplay () {
-    const symbol = operatorSymbols[currentOperator];
-    operationSignDisplay.textContent = symbol;
-}
-
-function saveToNumOne(overwrite) {
-    if (overwrite) {
-        num1 = parseFloat(currentNum);
-    } else {
-        num1 += parseFloat(currentNum);
-    }
-    if (isNaN(num1)) {
-        num1 = 0;
-    }
-    currentNum = [];
-    currentTextDisplay = [];
-}
-
-function saveToNumTwo () {
-    num2 = parseFloat(currentNum);
-    currentNum = [];
-    currentTextDisplay = [];
-}
-
-function saveCalculatedNumber () {
-    savedNumberDisplay.textContent = calculatedNum;
-    num1 = calculatedNum;
-    currentNum = [];
-    currentTextDisplay = [];
+function clearAll () {
     currentNumberDisplay.textContent = "";
+    operatorDisplay.textContent = "";
+    savedNumberDisplay.textContent = "";
+    memoryDisplay.textContent = "";
+    operand1 = null;
+    operand2 = null;
+    operator = null;
+    decimalButton.disabled = false;
 }
 
-function calculateNum () {
-    switch (currentOperator) {
-        case '+':
-            calculatedNum = num1 + num2;
+function deleteLast () {
+    currentNumberDisplay.textContent = currentNumberDisplay.textContent.substring(0, currentNumberDisplay.textContent.length - 1);
+}
+
+function calculate(operand1, operand2, operator) {
+    let result;
+    switch(operator) {
+      case '+':
+        result = operand1 + operand2;
         break;
-        case '-':
-             calculatedNum = num1 - num2;
+      case '-':
+        result = operand1 - operand2;
         break;
-        case '*':
-            calculatedNum = num1 * num2;
+      case 'x':
+        result = operand1 * operand2;
         break;
-        case '/':
-            if (num2 === 0) {
-            alert("Error: Cannot divide by zero!")
-            calculatedNum = null;
-            } else {
-            calculatedNum = num1 / num2;
-            }
+      case '÷':
+        if(operand2 === 0) {
+            alert("Cannot divide by 0")
+          result = NaN;
+        } else {
+          result = operand1 / operand2;
+        }
         break;
-        default:
-            calculatedNum = NaN;
+      default:
+        result = NaN;
     }
-    num1 = null;
-    num2 = null;
-  }
-  
-    function clearAll () {
-        console.log("Clearing all...");
-      num1 = null;
-      num2 = null;
-      currentNum = [];
-      calculatedNum = null;
-      currentOperator = null;
-      currentButtonClicked = "";
-      currentNumberDisplay.textContent = "";
-      savedNumberDisplay.textContent = "";
-      operationSignDisplay.textContent = "";
-      currentTextDisplay = [];
-      console.log("Done clearing all.")
-  }
-
-//   function deleteLast () {
-//     currentNum.pop();
-//   }
-
-//end first button press sequence when operation is pressed
-//begin second button press sequence, store number into num2
-//end second button press sequence when operation is pressed or equal sign is pressed
-//save to memory function
-
-
+    result = Number(result.toFixed(2));
+    let equation = operand1 + " " + operator + " " + operand2 + " " + "=" + " " + result;
+    memoryDisplay.innerHTML += equation + "<br>";
+    memoryDisplay.scrollTop = memoryDisplay.scrollHeight;
+    decimalButton.disabled = false;
+  return result;
+}
