@@ -96,12 +96,19 @@ button {
     border-radius: 20px;
 }
 
-button:hover {
+button:hover,
+button.active {
     box-shadow: 0 0 10px RGB(102, 204, 255);
     transform: scale(1.1);
     transition: transform 0.2s ease-in-out;
 }
 
-#clear-button:hover, #delete-button:hover {
+#clear-button:hover, #delete-button:hover,
+#clear-button:active, #delete-button:active {
 box-shadow: 0 0 10px RGB(255, 140, 135);
 }
+
+button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }

@@ -11,6 +11,57 @@ let equalSign = document.getElementById("equals-button");
 let deleteButton = document.getElementById("delete-button");
 let memoryDisplay = document.querySelector(".memory-display");
 let decimalButton = document.getElementById(".");
+const keyMap = {
+    "1": "1",
+    "2": "2",
+    "3": "3",
+    "4": "4",
+    "5": "5",
+    "6": "6",
+    "7": "7",
+    "8": "8",
+    "9": "9",
+    "0": "0",
+    ".": ".",
+    "+": "+",
+    "-": "-",
+    "*": "x",
+    "/": "÷",
+    "Enter": "=",
+    "Backspace": "delete",
+    "Delete": "clear",
+  };
+
+  // Add event listener to the window object to listen for key presses
+  window.addEventListener("keydown", function(event) {
+    const key = event.key;
+  
+    if (keyMap.hasOwnProperty(key)) {
+      event.preventDefault();
+      const buttonValue = keyMap[key];
+      const button = document.querySelector(`button[data-value="${buttonValue}"]`);
+  
+      if (button) {
+        button.classList.add("active");
+        button.click();
+      }
+    }
+  });
+  
+  window.addEventListener("keyup", function(event) {
+    const key = event.key;
+  
+    if (keyMap.hasOwnProperty(key)) {
+      const buttonValue = keyMap[key];
+      const button = document.querySelector(`button[data-value="${buttonValue}"]`);
+  
+      if (button) {
+        button.classList.remove("active");
+      }
+    }
+  });
+  
+
 
 // Loop through each button and add a click event listener to it
 digits.forEach(function(button) {
