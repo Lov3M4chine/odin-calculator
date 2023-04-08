@@ -97,12 +97,12 @@ operators.forEach(function(button) {
       // use the current number display as the first operand
       if (operand1 === null || operator === null) {
         operand1 = parseFloat(currentNumberDisplay.textContent);
-        savedNumberDisplay.textContent = operand1;
+        savedNumberDisplay.textContent = Number(operand1.toFixed(2));
       } else {
         // Otherwise, use the result of the previous calculation as the first operand
         operand2 = parseFloat(currentNumberDisplay.textContent);
         operand1 = calculate(operand1, operand2, operator);
-        savedNumberDisplay.textContent = operand1;
+        savedNumberDisplay.textContent = Number(operand1.toFixed(2));
       }
 
       // Store the operator for the current calculation
@@ -121,7 +121,7 @@ equalSign.addEventListener("click", function() {
     // Calculate the result of the current operation
     let result = calculate(operand1, operand2, operator);
     // Update the saved number display with the result
-    savedNumberDisplay.textContent = result;
+    savedNumberDisplay.textContent = Number(result.toFixed(2));
     // Clear the operator display and the current number display for the next calculation
     operatorDisplay.textContent = "";
     currentNumberDisplay.textContent = "";
@@ -159,27 +159,27 @@ function calculate(operand1, operand2, operator) {
     let result;
     switch(operator) {
       case '+':
-        result = operand1 + operand2;
+        result = Number(operand1.toFixed(2)) + Number(operand2.toFixed(2));
         break;
       case '-':
-        result = operand1 - operand2;
+        result = Number(operand1.toFixed(2)) - Number(operand2.toFixed(2));
         break;
       case 'x':
-        result = operand1 * operand2;
+        result = Number(operand1.toFixed(2)) * Number(operand2.toFixed(2));
         break;
       case '÷':
         if(operand2 === 0) {
             alert("Cannot divide by 0")
           result = NaN;
         } else {
-          result = operand1 / operand2;
+          result = Number(operand1.toFixed(2)) / Number(operand2.toFixed(2));
         }
         break;
       default:
         result = NaN;
     }
     result = Number(result.toFixed(2));
-    let equation = operand1 + " " + operator + " " + operand2 + " " + "=" + " " + result;
+    let equation = Number(operand1.toFixed(2)) + " " + operator + " " + Number(operand2.toFixed(2)) + " " + "=" + " " + result;
     memoryDisplay.innerHTML += equation + "<br>";
     memoryDisplay.scrollTop = memoryDisplay.scrollHeight;
     decimalButton.disabled = false;

@@ -2,6 +2,7 @@
     display: flex;
     justify-content: center;
     align-items: start;
+    background-color: #F5DEB3;
 }
 
 .calculator-container {
