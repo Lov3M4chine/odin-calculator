@@ -100,3 +100,7 @@ button:hover {
     transform: scale(1.1);
     transition: transform 0.2s ease-in-out;
 }
+
+#clear-button:hover, #delete-button:hover {
+box-shadow: 0 0 10px RGB(255, 140, 135);
+}
